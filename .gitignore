@@ -1,0 +1,28 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+# Local source snapshots and backup files
+.backup-*/
+backups/
+docker-compose.yml.bak-*
+
+# Local environment backups
+**/.env.backup-*
+
+# Backup files created during local development
+*.bak
+*.bak-*
+*.backup
+*.backup-*
+
+# Pre-change snapshots
+*.pre-barcode-*
+*.pre-return-*

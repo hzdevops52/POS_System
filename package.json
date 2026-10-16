@@ -1,0 +1,22 @@
+{
+  "name": "hz-retail-pos",
+  "version": "1.0.0",
+  "description": "A portfolio-focused retail point-of-sale application built with React, Vite, Node.js, Express, and MongoDB.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -k -n backend,frontend -c blue,green \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "build": "npm --prefix frontend run build",
+    "check": "npm --prefix backend run check"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
