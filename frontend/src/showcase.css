@@ -1,0 +1,256 @@
+
+@import './app.css';
+
+/* GitHub Pages showcase-only styling */
+
+.showcase-app {
+  min-height: 100vh;
+}
+
+.showcase-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  margin-bottom: 22px;
+  border: 1px solid #e7d7a8;
+  border-radius: 10px;
+  background: #fff8e7;
+  color: #654f19;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.showcase-badge.green {
+  color: #245b3b;
+  background: #e2f1e5;
+}
+
+.showcase-badge.amber {
+  color: #805d12;
+  background: #fff0c7;
+}
+
+.showcase-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.showcase-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(320px, 100%);
+  padding: 10px 12px;
+  border: 1px solid #dadfd8;
+  border-radius: 9px;
+  background: #fff;
+  color: #66716a;
+}
+
+.showcase-search input,
+.top-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #252a27;
+  font: inherit;
+}
+
+.showcase-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #3f4942;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.showcase-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 12px;
+  min-height: 220px;
+  padding: 22px 12px 8px;
+  border-bottom: 1px solid #e7e9e3;
+}
+
+.showcase-bar-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  height: 190px;
+  min-width: 0;
+  color: #707a72;
+  font-size: 11px;
+}
+
+.showcase-bar {
+  width: min(34px, 72%);
+  min-height: 8px;
+  border-radius: 6px 6px 2px 2px;
+  background: #6e9a78;
+  transition: opacity 0.2s ease;
+}
+
+.showcase-bar-column:hover .showcase-bar {
+  opacity: 0.75;
+}
+
+.showcase-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  color: #66716a;
+  font-size: 12px;
+}
+
+.showcase-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.showcase-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: #6e9a78;
+}
+
+.showcase-inventory {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 95px;
+}
+
+.showcase-stock-track {
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #edf0ea;
+}
+
+.showcase-stock-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #6e9a78;
+}
+
+.showcase-stock-fill.amber-fill {
+  background: #d5a63d;
+}
+
+.showcase-stock-fill.red-fill {
+  background: #c9675b;
+}
+
+.showcase-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 320px;
+  padding: 32px;
+  border: 1px dashed #cfd8ce;
+  border-radius: 14px;
+  background: #fbfcf9;
+  text-align: center;
+}
+
+.showcase-lock {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #e5eee5;
+  color: #244c3a;
+}
+
+.showcase-placeholder p {
+  max-width: 440px;
+  margin: 0;
+  color: #66716a;
+  line-height: 1.65;
+}
+
+.showcase-report {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.showcase-report .report-note {
+  color: #66716a;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .showcase-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .showcase-search {
+    width: 100%;
+  }
+
+  .showcase-chart {
+    gap: 6px;
+    padding-inline: 2px;
+  }
+
+  .showcase-bar-column {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .showcase-banner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .showcase-placeholder {
+    min-height: 260px;
+    padding: 22px 14px;
+  }
+
+  .showcase-chart {
+    min-height: 180px;
+  }
+
+  .showcase-bar-column {
+    height: 155px;
+  }
+}

@@ -1,3 +1,4 @@
+
 name: HZ Retail POS CI
 
 on:
@@ -10,7 +11,7 @@ permissions:
 
 jobs:
   validate-and-build:
-    name: Validate application and Docker images
+    name: Validate application and build images
     runs-on: ubuntu-latest
 
     steps:
@@ -35,11 +36,40 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci --prefix frontend
 
-      - name: Build frontend
+      - name: Build normal frontend
         run: npm run build --prefix frontend
+
+      - name: Build static showcase for GitHub Pages
+        env:
+          VITE_STATIC_DEMO: "true"
+        run: npm run build --prefix frontend
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
 
       - name: Build backend Docker image
         run: docker build -t hz-retail-pos-backend:ci ./backend
 
       - name: Build frontend Docker image
         run: docker build -t hz-retail-pos-frontend:ci ./frontend
+
+  deploy-pages:
+    name: Deploy showcase to GitHub Pages
+    if: github.event_name != 'pull_request'
+    needs: validate-and-build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
