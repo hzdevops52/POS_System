@@ -10,6 +10,7 @@ import saleRoutes from './routes/sale.routes.js';
 import inventoryRoutes from './routes/inventory.routes.js';
 import returnRoutes from './routes/return.routes.js';
 import reportRoutes from './routes/report.routes.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 import userRoutes from './routes/user.routes.js';
 import settingsRoutes from './routes/settings.routes.js';
 
@@ -33,6 +34,7 @@ app.use('/api/v1/sales', saleRoutes);
 app.use('/api/v1/inventory', inventoryRoutes);
 app.use('/api/v1/returns', returnRoutes);
 app.use('/api/v1/reports', reportRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/settings', settingsRoutes);
 

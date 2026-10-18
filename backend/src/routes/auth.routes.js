@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import {
   login,
   logout,
@@ -8,7 +9,20 @@ import { requireAuth } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.post('/login', login);
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: {
+      code: 'LOGIN_RATE_LIMITED',
+      message: 'Too many login attempts. Please try again in 15 minutes.'
+    }
+  }
+});
+
+router.post('/login', loginLimiter, login);
 router.post('/logout', logout);
 router.get('/me', requireAuth, currentUser);
 

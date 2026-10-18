@@ -5,12 +5,14 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, ShoppingCart, Package, Boxes, ReceiptText,
   ChartNoAxesCombined, Settings, Users, Search, Bell, Menu, X, Store,
-  ChevronDown, ArrowUpRight, ArrowDownRight, AlertTriangle,
+  ChevronDown, ArrowUpRight, BookOpen, ArrowDownRight, AlertTriangle,
   CircleDollarSign, ShoppingBag, TrendingUp, Clock3, Plus,
   ScanBarcode, CreditCard, RotateCcw, SlidersHorizontal,
   RefreshCw, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import './app.css';
+import ProductsCsvImport from './ProductsCsvImport.jsx';
+
 import ReturnsPage from './ReturnsPage.jsx';
 import ReportsPage from './ReportsPage.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -58,6 +60,19 @@ const metrics = [
 
 function Sidebar({ active, onNavigate, open, onClose, storeName = 'HZ Retail', storeDetails = {} }) {
   const [storeDetailsOpen, setStoreDetailsOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [helpQuery, setHelpQuery] = useState('');
+  const helpTopics = [
+    { title: 'Getting started', text: 'Configure store details, create categories, add products, and verify stock before your first sale.' },
+    { title: 'Products and CSV import', text: 'Use unique SKUs and existing active categories. Follow the CSV template. Imported products start with zero stock; receive stock through Stock Management.' },
+    { title: 'Point of Sale', text: 'Find products, add them to the cart, review quantities and totals, and complete the sale using the payment options available in your installation.' },
+    { title: 'Stock management', text: 'Record received stock through the inventory workflow. Review low-stock alerts and verify quantities after adjustments.' },
+    { title: 'Returns and refunds', text: 'Locate the original transaction, verify returned items and quantities, and check the refund and inventory changes before finishing.' },
+    { title: 'Reports and troubleshooting', text: 'Use reports to review recorded activity. If a page fails, refresh once. If the issue persists, contact your POS administrator.' }
+  ];
+  const filteredHelpTopics = helpTopics.filter(topic =>
+    (topic.title + ' ' + topic.text).toLowerCase().includes(helpQuery.trim().toLowerCase())
+  );
   return (
     <>
       {open && <button className="mobile-backdrop" aria-label="Close navigation" onClick={onClose} />}
@@ -110,11 +125,29 @@ function Sidebar({ active, onNavigate, open, onClose, storeName = 'HZ Retail', s
           ))}
         </nav>
 
-        <div className="sidebar-footer">
-          <div className="help-icon">?</div>
-          <div><strong>Need a hand?</strong><span>Help & documentation</span></div>
+        <button type="button" className="sidebar-footer sidebar-help-button" onClick={() => { setHelpQuery(''); setHelpOpen(true); }} aria-haspopup="dialog">
+          <span className="help-icon"><BookOpen size={18} strokeWidth={1.8} /></span>
+          <span className="sidebar-help-copy"><strong>Need a hand?</strong><span>Help & documentation</span></span>
           <ArrowUpRight size={15} />
-        </div>
+        </button>
+        {helpOpen && (
+          <div className="help-dialog-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) setHelpOpen(false); }}>
+            <section className="help-dialog" role="dialog" aria-modal="true" aria-labelledby="help-dialog-title">
+              <header className="help-dialog-header">
+                <div><p className="eyebrow">HZ RETAIL POS</p><h2 id="help-dialog-title">Help & documentation</h2><p>Quick guidance for everyday shop operations.</p></div>
+                <button type="button" className="icon-button" aria-label="Close help" onClick={() => setHelpOpen(false)}><X size={19} /></button>
+              </header>
+              <label className="help-search-label" htmlFor="help-topic-search">Search help topics</label>
+              <input id="help-topic-search" className="help-topic-search" type="search" placeholder="Try products, stock, sales..." value={helpQuery} onChange={event => setHelpQuery(event.target.value)} />
+              <div className="help-topic-list">
+                {filteredHelpTopics.length ? filteredHelpTopics.map(topic => (
+                  <article className="help-topic" key={topic.title}><h3>{topic.title}</h3><p>{topic.text}</p></article>
+                )) : <p className="help-no-results">No matching topics. Try another search.</p>}
+              </div>
+              <footer className="help-dialog-footer"><span>Need more assistance? Contact your POS administrator.</span><button type="button" className="primary-button" onClick={() => setHelpOpen(false)}>Got it</button></footer>
+            </section>
+          </div>
+        )}
         <div className="sidebar-version">{storeName} POS <span>•</span> Development</div>
       </aside>
     </>
@@ -123,6 +156,7 @@ function Sidebar({ active, onNavigate, open, onClose, storeName = 'HZ Retail', s
 
 function Dashboard() {
   const [sales, setSales] = useState([]);
+  const [dailySummary, setDailySummary] = useState({ totalPaisa: 0, transactions: 0, averageSalePaisa: 0, hourlySales: [] });
   const [inventory, setInventory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -138,13 +172,15 @@ function Dashboard() {
     setLoading(true);
     setError('');
     try {
-      const [salesResponse, inventoryResponse] = await Promise.all([
+      const [salesResponse, inventoryResponse, summaryResponse] = await Promise.all([
         fetch('/api/v1/sales?limit=100&page=1'),
         fetch('/api/v1/inventory/summary'),
+        fetch('/api/v1/dashboard/summary'),
       ]);
-      const [salesResult, inventoryResult] = await Promise.all([
+      const [salesResult, inventoryResult, summaryResult] = await Promise.all([
         salesResponse.json(),
         inventoryResponse.json(),
+        summaryResponse.json(),
       ]);
       if (!salesResponse.ok) {
         throw new Error(salesResult.error?.message || salesResult.message || 'Could not load sales.');
@@ -152,7 +188,11 @@ function Dashboard() {
       if (!inventoryResponse.ok) {
         throw new Error(inventoryResult.error?.message || inventoryResult.message || 'Could not load inventory.');
       }
+      if (!summaryResponse.ok) {
+        throw new Error(summaryResult.error?.message || summaryResult.message || 'Could not load daily sales summary.');
+      }
       setSales(Array.isArray(salesResult.data) ? salesResult.data : []);
+      setDailySummary(summaryResult.data || { totalPaisa: 0, transactions: 0, averageSalePaisa: 0, hourlySales: [] });
       setInventory(inventoryResult.data || null);
     } catch (err) {
       setError(err.message || 'Could not load dashboard data.');
@@ -164,22 +204,14 @@ function Dashboard() {
   useEffect(() => { loadDashboard(); }, []);
 
   const now = new Date();
-  const todaySales = sales.filter(sale => {
-    const date = new Date(sale.createdAt);
-    return !Number.isNaN(date.getTime()) && date.toDateString() === now.toDateString();
-  });
-  const todayTotal = todaySales.reduce((sum, sale) => sum + (Number(sale.totalPaisa) || 0), 0);
-  const averageSale = todaySales.length ? Math.round(todayTotal / todaySales.length) : 0;
+  const todayTotal = Number(dailySummary.totalPaisa) || 0;
+  const todayTransactions = Number(dailySummary.transactions) || 0;
+  const averageSale = Number(dailySummary.averageSalePaisa) || 0;
   const lowStock = Number(inventory?.lowStock) || 0;
-  const hourlySales = Array.from({ length: 12 }, (_, index) => {
-    const hour = index * 2;
-    const total = todaySales.reduce((sum, sale) => {
-      const date = new Date(sale.createdAt);
-      return date.getHours() >= hour && date.getHours() < hour + 2
-        ? sum + (Number(sale.totalPaisa) || 0) : sum;
-    }, 0);
-    return { label: `${String(hour).padStart(2, '0')}:00`, total };
-  });
+  const hourlySales = (dailySummary.hourlySales || []).map(item => ({
+    label: `${String(item.startHour).padStart(2, '0')}:00`,
+    total: Number(item.totalPaisa) || 0,
+  }));
   const maxHourlySales = Math.max(...hourlySales.map(item => item.total), 1);
   const recentSales = [...sales].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -190,8 +222,8 @@ function Dashboard() {
   }).toUpperCase();
 
   const metrics = [
-    { title: "Today's Sales", value: money(todayTotal), change: `${todaySales.length} completed sales today`, icon: CircleDollarSign, tone: 'green' },
-    { title: 'Transactions', value: String(todaySales.length), change: 'Completed today', icon: ShoppingBag, tone: 'sage' },
+    { title: "Today's Sales", value: money(todayTotal), change: `${todayTransactions} completed sales today`, icon: CircleDollarSign, tone: 'green' },
+    { title: 'Transactions', value: String(todayTransactions), change: 'Completed today', icon: ShoppingBag, tone: 'sage' },
     { title: 'Average Sale', value: money(averageSale), change: 'Average transaction today', icon: TrendingUp, tone: 'amber' },
     { title: 'Low Stock Items', value: String(lowStock), change: `${Number(inventory?.outOfStock) || 0} out of stock`, icon: AlertTriangle, tone: 'red' },
   ];
@@ -255,7 +287,7 @@ function Dashboard() {
                   <span className="chart-hour">{item.label}</span>
                 </div>
               ))}
-              {!todaySales.length && <p className="chart-note">No sales recorded today yet.</p>}
+              {!todayTransactions && <p className="chart-note">No sales recorded today yet.</p>}
             </div>
           )}
         </section>
@@ -733,7 +765,9 @@ function ProductsPage({ initialSearch = '' }) {
           </span>
         </div>
 
-        {error ? (
+        <ProductsCsvImport onImported={() => { setPage(1); setReloadKey(value => value + 1); }} />
+
+      {error ? (
           <div className="products-message products-error" role="alert">
             <AlertTriangle size={22} />
             <strong>Could not load products</strong>

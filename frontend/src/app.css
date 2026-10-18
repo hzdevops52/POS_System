@@ -1251,3 +1251,244 @@ td { padding: 0 16px; font-size: 11px; }
     break-inside: avoid;
   }
 }
+
+
+.csv-import-panel {
+  margin: 0 0 22px;
+  padding: 20px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 12px;
+  background: var(--card-bg, #fff);
+}
+.csv-import-heading, .csv-import-title, .csv-import-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.csv-import-heading { justify-content: space-between; flex-wrap: wrap; margin-bottom: 16px; }
+.csv-import-title { align-items: flex-start; }
+.csv-import-title > svg { flex-shrink: 0; margin-top: 3px; }
+.csv-import-title h3 { margin: 0 0 5px; font-size: 16px; }
+.csv-import-title p, .csv-import-help { margin: 0; color: var(--muted, #6b7280); font-size: 13px; line-height: 1.6; }
+.csv-import-controls { flex-wrap: wrap; margin-bottom: 12px; }
+.csv-import-controls input[type="file"] { min-width: 0; max-width: 100%; font-size: 13px; }
+.csv-import-message { display: flex; align-items: flex-start; gap: 9px; margin-top: 14px; padding: 12px; border-radius: 8px; font-size: 13px; overflow-wrap: anywhere; }
+.csv-import-message svg { flex-shrink: 0; margin-top: 2px; }
+.csv-import-message p { margin: 0 0 5px; white-space: pre-wrap; }
+.csv-import-message p:last-child { margin-bottom: 0; }
+.csv-import-error { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; }
+.csv-import-success { color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; }
+.csv-import-controls button:disabled, .csv-import-heading button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 600px) {
+  .csv-import-panel { padding: 14px; }
+  .csv-import-heading { align-items: flex-start; }
+  .csv-import-controls { align-items: stretch; }
+  .csv-import-controls input[type="file"] { width: 100%; }
+}
+
+
+/* Help & Documentation Center */
+.sidebar-help-button {
+  width: 100%;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+}
+
+.sidebar-help-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-help-copy {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.help-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(18, 31, 23, 0.52);
+  backdrop-filter: blur(3px);
+}
+
+.help-dialog {
+  width: min(680px, 100%);
+  max-height: min(82vh, 760px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  color: #26372c;
+  border: 1px solid #e1e7df;
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(15, 30, 19, 0.22);
+}
+
+.help-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid #edf0eb;
+}
+
+.help-dialog-header h2 {
+  margin: 5px 0 7px;
+  font-size: 23px;
+  line-height: 1.3;
+}
+
+.help-dialog-header p {
+  margin: 0;
+  color: #6c796f;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.help-dialog-header .eyebrow {
+  color: #53775d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.help-search-label {
+  padding: 18px 24px 7px;
+  color: #435449;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.help-topic-search {
+  margin: 0 24px 16px;
+  width: calc(100% - 48px);
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #dce4db;
+  border-radius: 9px;
+  outline: none;
+  background: #fafcf9;
+  color: #26372c;
+  font: inherit;
+  font-size: 13px;
+}
+
+.help-topic-search:focus {
+  border-color: #64876b;
+  box-shadow: 0 0 0 3px rgba(100, 135, 107, 0.13);
+}
+
+.help-topic-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 24px 20px;
+  overflow-y: auto;
+}
+
+.help-topic {
+  padding: 15px;
+  border: 1px solid #e6ebe4;
+  border-radius: 10px;
+  background: #fbfcfa;
+}
+
+.help-topic h3 {
+  margin: 0 0 7px;
+  color: #314b38;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.help-topic p {
+  margin: 0;
+  color: #647168;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.help-no-results {
+  grid-column: 1 / -1;
+  padding: 20px 0;
+  color: #68756c;
+  font-size: 13px;
+  text-align: center;
+}
+
+.help-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 24px;
+  border-top: 1px solid #edf0eb;
+  background: #fff;
+}
+
+.help-dialog-footer > span {
+  color: #68756c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.help-dialog-footer .primary-button {
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .help-dialog-backdrop {
+    align-items: flex-end;
+    padding: 8px;
+  }
+
+  .help-dialog {
+    max-height: 90dvh;
+    border-radius: 14px;
+  }
+
+  .help-dialog-header {
+    padding: 19px 17px 15px;
+  }
+
+  .help-dialog-header h2 {
+    font-size: 20px;
+  }
+
+  .help-search-label {
+    padding: 15px 17px 7px;
+  }
+
+  .help-topic-search {
+    width: calc(100% - 34px);
+    margin: 0 17px 14px;
+  }
+
+  .help-topic-list {
+    grid-template-columns: 1fr;
+    padding: 0 17px 16px;
+  }
+
+  .help-dialog-footer {
+    padding: 13px 17px;
+  }
+}
+
+
+/* Center the Help documentation icon inside its circle */
+.sidebar-help-button .help-icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 34px; width:34px; height:34px; padding:0; box-sizing:border-box; line-height:1; }
+.sidebar-help-button .help-icon svg { display:block; flex:0 0 auto; margin:0; }
