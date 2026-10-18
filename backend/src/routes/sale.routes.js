@@ -6,7 +6,7 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.get('/', requireRole('admin', 'manager'), listSales);
+router.get('/', requireRole('admin', 'manager', 'cashier'), listSales);
 router.post('/', requireRole('admin', 'manager', 'cashier'), createSale);
 
 export default router;

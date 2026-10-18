@@ -4,7 +4,7 @@ import { requireAuth, requireRole } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.use(requireAuth, requireRole('admin', 'manager'));
+router.use(requireAuth, requireRole('admin', 'manager', 'cashier'));
 
 router.get('/summary', getReportSummary);
 

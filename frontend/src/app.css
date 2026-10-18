@@ -1492,3 +1492,65 @@ td { padding: 0 16px; font-size: 11px; }
 /* Center the Help documentation icon inside its circle */
 .sidebar-help-button .help-icon { display:inline-flex; align-items:center; justify-content:center; flex:0 0 34px; width:34px; height:34px; padding:0; box-sizing:border-box; line-height:1; }
 .sidebar-help-button .help-icon svg { display:block; flex:0 0 auto; margin:0; }
+
+/* Responsive shell safeguards */
+.app-layout,
+.main-area,
+.page-container {
+  min-width: 0;
+}
+
+.topbar {
+  min-width: 0;
+}
+
+.topbar-left {
+  flex: 0 1 auto;
+}
+
+.topbar-actions {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.global-search {
+  min-width: 0;
+}
+
+.user-profile {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    gap: 8px;
+  }
+
+  .topbar-left {
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
+
+  .breadcrumb {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar-actions {
+    flex: 0 0 auto;
+  }
+
+  .api-status {
+    display: none;
+  }
+
+  .user-profile .outline-button {
+    padding: 7px;
+    font-size: 0;
+  }
+
+  .user-profile .outline-button::after {
+    content: "Out";
+    font-size: 10px;
+  }
+}
